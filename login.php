@@ -6,7 +6,7 @@ include 'koneksi.php';
 
 //check jika belum ada user yang login arahkan ke halaman login
 if (isset($_session['username'])) {
-    header("location:index.html");
+    header("location:admin.php");
 }
 ?>
 
@@ -110,7 +110,7 @@ if (isset($_session['username'])) {
    				if (!empty($row)) { 
             //jika data ada (berhasil), alihkan ke halaman admin
             $_SESSION ['username'] =$username;
-            header("location:index.html");
+            header("location:admin.php");
         } else {
             //jika data tidak ada (gagal), tetap di halaman login
             header("location:login.php");

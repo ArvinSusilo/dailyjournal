@@ -1,10 +1,10 @@
 <?php
-    include "koneksi.php";
+         include "koneksi.php";
 
 $keyword = $_POST['keyword'];
 
-$sql = "SELECT * FROM article 
-        WHERE judul LIKE ? OR isi LIKE ? OR tanggal LIKE ? OR username LIKE ?
+$sql = "SELECT * FROM gallery 
+        WHERE deskripsi LIKE ? OR gambar LIKE ? OR tanggal LIKE ? OR username LIKE ?
         ORDER BY tanggal DESC";
 
 $stmt = $conn->prepare($sql);
@@ -13,48 +13,41 @@ $stmt->bind_param("ssss", $search, $search, $search, $search);
 $stmt->execute();
 
 $hasil = $stmt->get_result();
-    $no = 1;
-    while ($row = $hasil->fetch_assoc()) {
-?>
-<tr>
-    <td><?= $no++ ?></td>
-    <td>
-        <strong><?= $row["judul"] ?></strong>
-        <br>pada : <?= $row["tanggal"] ?>
-        <br>oleh : <?= $row["username"] ?>
-    </td>
-    <td><?= $row["isi"] ?></td>
-    <td>
-    <?php
-        if ($row["gambar"] != '') {
-        if (file_exists('' . $row["gambar"] . '')) { 
-        echo '<img src="' . $row["gambar"] . '" class="img-fluid" alt="Gambar Artikel">'; 
-            }
-        }
-?>
-    </td>
-    <td>
+                        $no = 1;
+                        while ($row = $hasil->fetch_assoc()) {
+                    ?>
+                        <tr>
+                            <td><?= $no++ ?></td>
+                            <td>
+                                <strong><?= $row["deskripsi"] ?></strong>
+                                <br>pada : <?= $row["tanggal"] ?>
+                                <br>oleh : <?= $row["username"] ?>
+                            </td>
+                            <td>
+                                <?php
+                                    if ($row["gambar"] != '') {
+                                        if (file_exists('' . $row["gambar"] . '')) { 
+                                            echo '<img src="' . $row["gambar"] . '" class="img-fluid" alt="Gambar Artikel">'; 
+                                        }
+                                    }
+                                ?>
+                            </td>
+                            <td>
 <a href="#" title="edit" class="badge rounded-pill text-bg-success" data-bs-toggle="modal" data-bs-target="#modalEdit<?= $row["id"] ?>"><i class="bi bi-pencil"></i></a>
 <a href="#" title="delete" class="badge rounded-pill text-bg-danger" data-bs-toggle="modal" data-bs-target="#modalHapus<?= $row["id"] ?>"><i class="bi bi-x-circle"></i></a>
-
 <!-- Awal Modal Edit -->
 <div class="modal fade" id="modalEdit<?= $row["id"] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Article</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit gallery</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="post" action="" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="judul" class="form-label">Judul</label>
-                        <input type="hidden" name="id" value="<?= $row["id"] ?>">
-                        <input type="text" class="form-control" name="judul" placeholder="Tuliskan Judul Artikel" value="<?= $row["judul"] ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="isi">Isi</label>
-                        <textarea class="form-control" placeholder="Tuliskan Isi Artikel" name="isi" required><?= $row["isi"] ?></textarea>
+                        <label for="isi">Deskripsi</label>
+                        <textarea class="form-control" placeholder="Tuliskan Isi gallery" name="deskripsi" required><?= $row["deskripsi"] ?></textarea>
                     </div>
                     <div class="mb-3">
                         <label for="gambar" class="form-label">Ganti Gambar</label>
@@ -87,13 +80,13 @@ $hasil = $stmt->get_result();
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Konfirmasi Hapus Article</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Konfirmasi Hapus Gallery</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="post" action="" enctype="multipart/form-data">
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="formGroupExampleInput" class="form-label">Yakin akan menghapus artikel "<strong><?= $row["judul"] ?></strong>"?</label>
+                        <label for="formGroupExampleInput" class="form-label">Yakin akan menghapus gallery "<strong><?= $row["deskripsi"] ?></strong>"?</label>
                         <input type="hidden" name="id" value="<?= $row["id"] ?>">
                         <input type="hidden" name="gambar" value="<?= $row["gambar"] ?>">
                     </div>
@@ -108,7 +101,8 @@ $hasil = $stmt->get_result();
 </div>
 <!-- Akhir Modal Hapus -->                       
 </td>
-</tr>               
-    <?php
-        }
-?>
+                        </tr>
+		                
+                    <?php
+                    }
+                    ?>
